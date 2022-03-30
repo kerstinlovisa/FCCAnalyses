@@ -130,5 +130,12 @@ namespace ReconstructedParticle{
 
   /// get number of b-jets
   int getJet_ntags(ROOT::VecOps::RVec<bool> in);
+
+  ROOT::VecOps::RVec<float> DeltaRBetweenTwoMCParticles( ROOT::VecOps::RVec<edm4hep::ReconstructedParticleData> p1, ROOT::VecOps::RVec<edm4hep::ReconstructedParticleData> p2 );
+
+  float DeltaRBetweenTwoMCParticles1( edm4hep::ReconstructedParticleData p1, edm4hep::ReconstructedParticleData p2 );
+
+  /// returns one RecostructedParticle selected by its index in the particle block
+  edm4hep::ReconstructedParticleData sel_byIndex( int idx, ROOT::VecOps::RVec<edm4hep::ReconstructedParticleData> in) ;
 }
 #endif

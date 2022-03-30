@@ -377,6 +377,59 @@ ReconstructedParticle2MC::selRP_matched_to_list( ROOT::VecOps::RVec<int>  mcPart
 
 }
 
+// -- select RecoParticles associated with a list of MC particles (passed by their index in the Particle block)
+// -- and corresponding to the reconstructed electrons
+
+ROOT::VecOps::RVec<edm4hep::ReconstructedParticleData>
+ReconstructedParticle2MC::selRP_ele_matched_to_list( ROOT::VecOps::RVec<int>  mcParticles_indices,
+						 ROOT::VecOps::RVec<int> recind, 
+						 ROOT::VecOps::RVec<int> mcind,
+						 ROOT::VecOps::RVec<edm4hep::ReconstructedParticleData> reco,  
+						 ROOT::VecOps::RVec<edm4hep::MCParticleData> mc,
+             ROOT::VecOps::RVec<int> eleind) {
+  
+  ROOT::VecOps::RVec<edm4hep::ReconstructedParticleData>  results;
+  
+  edm4hep::ReconstructedParticleData dummy;
+  dummy.energy = -9999;
+  dummy.tracks_begin = -9999 ;
+
+  for ( auto & idx: mcParticles_indices ) {
+
+    // exclude unstable particles - e.g. the list may contain the index of
+    // the mother
+    if ( mc.at(idx).generatorStatus != 1 ) continue ;
+
+    // is this MC particle associated with a Reco particle :
+    bool found = false;
+    for (int i=0; i<recind.size();i++) {
+      int reco_idx = recind.at(i);
+      int mc_idx = mcind.at(i);
+      // int ele_idx1 = eleind.at(i);
+      // int ele_idx2 = eleind.at(reco_idx);
+      if ( mc_idx == idx & eleind.size() > 1 ) {
+
+        for (int j=0; j<eleind.size(); j++) {
+          int ele_idx = eleind.at(j);
+          if (reco_idx == ele_idx) {
+            found = true;
+            results.push_back( reco.at( reco_idx ) );
+          }
+        }
+        break;
+      }
+    }
+    // no Reco particle has been found for idx: add a dummy particle such that
+    // one preserves the mapping with the input list
+    if ( ! found) results.push_back( dummy );
+
+
+  } // loop over the indices in the list
+
+  return results;
+
+}
+
 
 
 
