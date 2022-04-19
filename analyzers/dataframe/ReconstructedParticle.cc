@@ -398,65 +398,13 @@ int ReconstructedParticle::getJet_ntags(ROOT::VecOps::RVec<bool> in) {
 }
 
 
-ROOT::VecOps::RVec<float> ReconstructedParticle::DeltaRBetweenTwoMCParticles( ROOT::VecOps::RVec<edm4hep::ReconstructedParticleData> p1, ROOT::VecOps::RVec<edm4hep::ReconstructedParticleData> p2 ) {
-
-  ROOT::VecOps::RVec<float> result;
-  if ( p1.size() != p2.size() ) {
-        std::cout << "  !!! in DeltaRBetweenTwoMCParticles: the arguments p1 and p2 should have the same size " << std::endl;
-        return result;
-  }
-
-  float phi1, phi2, eta1, eta2, dphi;
-  for (int i=0; i < p1.size(); i++) {
-    TLorentzVector tlv1, tlv2;
-    tlv1.SetXYZM(p1[i].momentum.x, p1[i].momentum.y, p1[i].momentum.z, p1[i].mass);
-    tlv2.SetXYZM(p2[i].momentum.x, p2[i].momentum.y, p2[i].momentum.z, p2[i].mass);
-    phi1 = tlv1.Phi();
-    phi2 = tlv2.Phi();
-    eta1 = tlv1.Eta();
-    eta2 = tlv2.Eta();
-
-    dphi = std::abs(phi1-phi2);
-    if (dphi > float(M_PI)) {
-      dphi -= float(2 * M_PI);
-    }
-
-    result.push_back(std::sqrt((eta1 - eta2) * (eta1 - eta2) + dphi*dphi));
-  }
-  return result;
-}
-
-float ReconstructedParticle::DeltaRBetweenTwoMCParticles1( edm4hep::ReconstructedParticleData p1, edm4hep::ReconstructedParticleData p2 ) {
-
-  float result;
-
-  float phi1, phi2, eta1, eta2, dphi;
+float ReconstructedParticle::DeltaRBetweenTwoMCParticles( edm4hep::ReconstructedParticleData p1, edm4hep::ReconstructedParticleData p2 ) {
 
   TLorentzVector tlv1, tlv2;
   tlv1.SetXYZM(p1.momentum.x, p1.momentum.y, p1.momentum.z, p1.mass);
   tlv2.SetXYZM(p2.momentum.x, p2.momentum.y, p2.momentum.z, p2.mass);
-  phi1 = tlv1.Phi();
-  phi2 = tlv2.Phi();
-  eta1 = tlv1.Eta();
-  eta2 = tlv2.Eta();
-  dphi = std::abs(phi1-phi2);
-  if (dphi > float(M_PI)) {
-    dphi -= float(2 * M_PI);
-  }
 
-  result = std::sqrt((eta1 - eta2) * (eta1 - eta2) + dphi*dphi);
-  return result;
-}
+  // float result = tlv1.DeltaR(tlv2);
 
-
-// returns one MCParticle selected by its index in the particle block
-edm4hep::ReconstructedParticleData ReconstructedParticle::sel_byIndex( int idx, ROOT::VecOps::RVec<edm4hep::ReconstructedParticleData> in) {
-    edm4hep::ReconstructedParticleData dummy;
-    if ( idx >= 0 && idx < in.size() ) {
-           return in.at(idx) ;
-    }
-    // else {
-    //        std::cout << " !!!! in sel_byIndex : index = " << idx << " is larger than the size of the ReconstructedParticle block " << in.size() << std::endl;
-    // }
-    return dummy;
+  return tlv1.DeltaR(tlv2);
 }

@@ -637,52 +637,15 @@ ROOT::VecOps::RVec<float> MCParticle::AngleBetweenTwoMCParticles( ROOT::VecOps::
 }
 
 
-float MCParticle::DeltaRBetweenTwoMCParticles1( edm4hep::MCParticleData p1, edm4hep::MCParticleData p2 ) {
+float MCParticle::DeltaRBetweenTwoMCParticles( edm4hep::MCParticleData p1, edm4hep::MCParticleData p2 ) {
 
-  float phi1, phi2, eta1, eta2, dphi;
+  // float phi1, phi2, eta1, eta2, dphi;
 
   TLorentzVector tlv1, tlv2;
   tlv1.SetXYZM(p1.momentum.x, p1.momentum.y, p1.momentum.z, p1.mass);
   tlv2.SetXYZM(p2.momentum.x, p2.momentum.y, p2.momentum.z, p2.mass);
-  phi1 = tlv1.Phi();
-  phi2 = tlv2.Phi();
-  eta1 = tlv1.Eta();
-  eta2 = tlv2.Eta();
-  dphi = std::abs(phi1-phi2);
-  if (dphi > float(M_PI)) {
-    dphi -= float(2 * M_PI);
-  }
 
-  float result = std::sqrt((eta1 - eta2) * (eta1 - eta2) + dphi*dphi);
-  return result;
+  return tlv1.DeltaR(tlv2);
 }
 
-ROOT::VecOps::RVec<float> MCParticle::DeltaRBetweenTwoMCParticles( ROOT::VecOps::RVec<edm4hep::MCParticleData> p1, ROOT::VecOps::RVec<edm4hep::MCParticleData> p2 ) {
-
-  ROOT::VecOps::RVec<float> result;
-  if ( p1.size() != p2.size() ) {
-        std::cout << "  !!! in DeltaRBetweenTwoMCParticles: the arguments p1 and p2 should have the same size " << std::endl;
-        return result;
-  }
-
-  float phi1, phi2, eta1, eta2, dphi;
-  for (int i=0; i < p1.size(); i++) {
-  // for (auto & p: in) {
-    TLorentzVector tlv1, tlv2;
-    tlv1.SetXYZM(p1[i].momentum.x, p1[i].momentum.y, p1[i].momentum.z, p1[i].mass);
-    tlv2.SetXYZM(p2[i].momentum.x, p2[i].momentum.y, p2[i].momentum.z, p2[i].mass);
-    phi1 = tlv1.Phi();
-    phi2 = tlv2.Phi();
-    eta1 = tlv1.Eta();
-    eta2 = tlv2.Eta();
-
-    dphi = std::abs(phi1-phi2);
-    if (dphi > float(M_PI)) {
-      dphi -= float(2 * M_PI);
-    }
-
-    result.push_back(std::sqrt((eta1 - eta2) * (eta1 - eta2) + dphi*dphi));
-  }
-  return result;
-}
 
