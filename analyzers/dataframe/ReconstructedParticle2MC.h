@@ -129,15 +129,6 @@ namespace ReconstructedParticle2MC{
 										ROOT::VecOps::RVec<int> mcind, 
 										ROOT::VecOps::RVec<edm4hep::ReconstructedParticleData> reco,
 										ROOT::VecOps::RVec<edm4hep::MCParticleData> mc) ;
-
-  /// select ReconstructedParticles matched to the (stable) MC particles whose indices are passed in a list
-  /// and to the reconstructed electron indices passed in another list
-  ROOT::VecOps::RVec<edm4hep::ReconstructedParticleData> selRP_ele_matched_to_list( ROOT::VecOps::RVec<int>   mcParticles_indices,
-										ROOT::VecOps::RVec<int> recind, 
-										ROOT::VecOps::RVec<int> mcind, 
-										ROOT::VecOps::RVec<edm4hep::ReconstructedParticleData> reco,
-										ROOT::VecOps::RVec<edm4hep::MCParticleData> mc,
-										ROOT::VecOps::RVec<int> eleind) ;
   
   /// return the index of the MC particle that is associated to a given track (via the track-reco association)
   int getTrack2MC_index (  int track_index,
