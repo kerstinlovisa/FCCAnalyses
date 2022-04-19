@@ -141,5 +141,8 @@ namespace ReconstructedParticle{
 
   /// get number of b-jets
   int getJet_ntags(ROOT::VecOps::RVec<bool> in);
+
+  float DeltaRBetweenTwoMCParticles( edm4hep::ReconstructedParticleData p1, edm4hep::ReconstructedParticleData p2 );
+
 }
 #endif

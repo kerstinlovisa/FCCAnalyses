@@ -397,3 +397,14 @@ int ReconstructedParticle::getJet_ntags(ROOT::VecOps::RVec<bool> in) {
   return result;
 }
 
+
+float ReconstructedParticle::DeltaRBetweenTwoMCParticles( edm4hep::ReconstructedParticleData p1, edm4hep::ReconstructedParticleData p2 ) {
+
+  TLorentzVector tlv1, tlv2;
+  tlv1.SetXYZM(p1.momentum.x, p1.momentum.y, p1.momentum.z, p1.mass);
+  tlv2.SetXYZM(p2.momentum.x, p2.momentum.y, p2.momentum.z, p2.mass);
+
+  // float result = tlv1.DeltaR(tlv2);
+
+  return tlv1.DeltaR(tlv2);
+}

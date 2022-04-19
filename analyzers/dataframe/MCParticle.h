@@ -186,6 +186,10 @@ namespace MCParticle{
   /// return the angle (3D) between two MCParticles :
   ROOT::VecOps::RVec<float> AngleBetweenTwoMCParticles( ROOT::VecOps::RVec<edm4hep::MCParticleData> p1, ROOT::VecOps::RVec<edm4hep::MCParticleData> p2 );
 
+  /// return delta R (3D) between two MCParticles :
+  float DeltaRBetweenTwoMCParticles( edm4hep::MCParticleData p1, edm4hep::MCParticleData p2 );
+
+
   /// return the list of stable particles from the decay of a mother particle, looking at the full decay chain recursively. i is the mother index in the Particle block
   std::vector<int> get_list_of_stable_particles_from_decay( int i, ROOT::VecOps::RVec<edm4hep::MCParticleData> in, ROOT::VecOps::RVec<int> ind) ;
 
