@@ -526,13 +526,13 @@ std::vector<int> list_of_particles_from_decay(int i, ROOT::VecOps::RVec<edm4hep:
 
 // ----------------------------------------------------------------------------------------------------------------------------------
 
-ROOT::VecOps::RVec<int>  MCParticle::get_indices_MotherByIndex ( int imother,
-								 std::vector<int> m_pdg_daughters,
-								 bool m_stableDaughters,
-								 bool m_chargeConjugateDaughters,
-								 bool m_inclusiveDecay,
-								 ROOT::VecOps::RVec<edm4hep::MCParticleData> in,
-								 ROOT::VecOps::RVec<int> ind) {
+ROOT::VecOps::RVec<int>  get_indices_MotherByIndex ( int imother,
+						     std::vector<int> m_pdg_daughters,
+						     bool m_stableDaughters,
+						     bool m_chargeConjugateDaughters,
+						     bool m_inclusiveDecay,
+						     ROOT::VecOps::RVec<edm4hep::MCParticleData> in,
+						     ROOT::VecOps::RVec<int> ind) {
 
   // Look for a specific decay specified by the mother index in the Particle block,
   // and by the PDG_ids of the daughters
@@ -578,7 +578,7 @@ ROOT::VecOps::RVec<int>  MCParticle::get_indices_MotherByIndex ( int imother,
 
 // ----------------------------------------------------------------------------------------------------------------------------------
 
-MCParticle::get_indices::get_indices( int pdg_mother, std::vector<int> pdg_daughters, bool stableDaughters, bool chargeConjugateMother, bool chargeConjugateDaughters, bool inclusiveDecay) {
+get_indices::get_indices( int pdg_mother, std::vector<int> pdg_daughters, bool stableDaughters, bool chargeConjugateMother, bool chargeConjugateDaughters, bool inclusiveDecay) {
   m_pdg_mother = pdg_mother;
   m_pdg_daughters = pdg_daughters;
   m_stableDaughters = stableDaughters;
@@ -587,23 +587,7 @@ MCParticle::get_indices::get_indices( int pdg_mother, std::vector<int> pdg_daugh
   m_inclusiveDecay = inclusiveDecay;
 } ;
 
-ROOT::VecOps::RVec<int>  MCParticle::get_indices::operator() ( ROOT::VecOps::RVec<edm4hep::MCParticleData> in, ROOT::VecOps::RVec<int> ind) {
-
-   // Look for a specific decay specified by the mother PDG_id and
-   // the PDG_ids of the daughters
-   // Returns a vector with the indicess, in the Particle block, of the mother and of
-   // the daughters - in the order defined by std::vector<int> pdg_daughters.
-   //
-   // In case there are several such decays in the event, keep only the first one.
-
-   ROOT::VecOps::RVec<int>  result;
-
-   for ( int imother =0; imother < in.size(); imother ++){
-     int pdg = in[imother].PDG ;
-     bool found_a_mother = false;
-     if ( ! m_chargeConjugate ) found_a_mother = ( pdg == m_pdg_mother );
-     if ( m_chargeConjugate )   found_a_mother = ( abs(pdg) == abs(m_pdg_mother) ) ;
-     if ( ! found_a_mother ) continue;
+ROOT::VecOps::RVec<int>  get_indices::operator() ( ROOT::VecOps::RVec<edm4hep::MCParticleData> in, ROOT::VecOps::RVec<int> ind) {
 
   // Look for a specific decay specified by the mother PDG_id and
   // the PDG_ids of the daughters
@@ -654,7 +638,7 @@ ROOT::VecOps::RVec<float> AngleBetweenTwoMCParticles( ROOT::VecOps::RVec<edm4hep
 }
 
 
-float MCParticle::DeltaRBetweenTwoMCParticles( edm4hep::MCParticleData p1, edm4hep::MCParticleData p2 ) {
+float DeltaRBetweenTwoMCParticles( edm4hep::MCParticleData p1, edm4hep::MCParticleData p2 ) {
 
   TLorentzVector tlv1, tlv2;
   tlv1.SetXYZM(p1.momentum.x, p1.momentum.y, p1.momentum.z, p1.mass);
@@ -663,5 +647,7 @@ float MCParticle::DeltaRBetweenTwoMCParticles( edm4hep::MCParticleData p1, edm4h
   return tlv1.DeltaR(tlv2);
 }
 
+
+}//end NS MCParticle
 
 }//end NS FCCAnalyses
