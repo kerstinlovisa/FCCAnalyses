@@ -14,10 +14,11 @@
 #include "edm4hep/Vector2i.h"
 
 
-/** MCParticle interface. 
-This represents a set functions and utilities to access and perform operations on the MCParticle collection.  
+/** MCParticle interface.
+This represents a set functions and utilities to access and perform operations on the MCParticle collection.
 */
-
+namespace FCCAnalyses{
+  
 namespace MCParticle{
 
   /// Filter events based on a MCParticles PDGID
@@ -27,21 +28,21 @@ namespace MCParticle{
     bool m_abs;//> Use absolute value for pdgig
     bool  operator() (ROOT::VecOps::RVec<edm4hep::MCParticleData> in);
   };
-  
+
   /// select MCParticles with transverse momentum greater than a minimum value [GeV]
   struct sel_pt {
     sel_pt(float arg_min_pt);
     float m_min_pt = 20; //> transverse momentum threshold [GeV]
     ROOT::VecOps::RVec<edm4hep::MCParticleData>  operator() (ROOT::VecOps::RVec<edm4hep::MCParticleData> in);
   };
-  
+
   /// select MCParticles with their status
   struct sel_genStatus {
     sel_genStatus(int arg_status);
     float m_status = 1; //> Generator status
     ROOT::VecOps::RVec<edm4hep::MCParticleData>  operator() (ROOT::VecOps::RVec<edm4hep::MCParticleData> in);
   };
-  
+
   /// select MCParticles with their PDG id
   struct sel_pdgID {
     sel_pdgID(int arg_pdg, bool arg_chargeconjugate);
@@ -49,14 +50,14 @@ namespace MCParticle{
     bool m_chargeconjugate = true;
     ROOT::VecOps::RVec<edm4hep::MCParticleData>  operator() (ROOT::VecOps::RVec<edm4hep::MCParticleData> in);
   };
-  
+
   /// get MC history tree for a given MCParticle index
   struct get_tree{
     get_tree(int arg_index);
     float m_index; //> MC Particle index to build the tree from
     ROOT::VecOps::RVec<int> operator() (ROOT::VecOps::RVec<edm4hep::MCParticleData> in, ROOT::VecOps::RVec<int> ind);
   };
-  
+
   /// get the decay of a given particle
   struct get_decay {
     get_decay(int arg_mother, int arg_daughters, bool arg_inf);
@@ -65,14 +66,13 @@ namespace MCParticle{
     bool m_inf = false;//> boolean to check if the pdgid is below a value rather than equal
     bool  operator() (ROOT::VecOps::RVec<edm4hep::MCParticleData> in, ROOT::VecOps::RVec<int> ind);
   };
-  
+
   /// return the event primary vertex  (mm)
   struct get_EventPrimaryVertex {
     get_EventPrimaryVertex( int arg_genstatus  );
     int m_genstatus = 21;   // Pythia8  code of the incoming particles of the hardest subprocess
     TVector3  operator() (ROOT::VecOps::RVec<edm4hep::MCParticleData> in);
   };
-  
 
  /// return a list of indices that correspond to a given MC decay. The list contains the index of the mother, followed by the indices of the daughters, in the order specified. If m_inclusiveDecay is true, the list of daughters is the minimum required for the mother's decay (otherwise, the list is the exact daughters required for the mother's decay). In case there are several such decays in the event, keep only the first one. 
   struct get_indices{
@@ -104,22 +104,22 @@ namespace MCParticle{
 
   /// return the PDG of the input MCParticles
   ROOT::VecOps::RVec<float> get_pdg(ROOT::VecOps::RVec<edm4hep::MCParticleData> in);
-  
+
   /// return the generator status of the input MCParticles
   ROOT::VecOps::RVec<float> get_genStatus(ROOT::VecOps::RVec<edm4hep::MCParticleData> in);
-  
+
   /// return the simulation status of the input MCParticles
   ROOT::VecOps::RVec<float> get_simStatus(ROOT::VecOps::RVec<edm4hep::MCParticleData> in);
 
   /// return the production vertex of the input MCParticles
   ROOT::VecOps::RVec<edm4hep::Vector3d> get_vertex(ROOT::VecOps::RVec<edm4hep::MCParticleData> in);
-  
+
   /// return the production vertex x of the input MCParticles
   ROOT::VecOps::RVec<float> get_vertex_x(ROOT::VecOps::RVec<edm4hep::MCParticleData> in);
 
   /// return the production vertex y of the input MCParticles
   ROOT::VecOps::RVec<float> get_vertex_y(ROOT::VecOps::RVec<edm4hep::MCParticleData> in);
-  
+
   /// return the production vertex z of the input MCParticles
   ROOT::VecOps::RVec<float> get_vertex_z(ROOT::VecOps::RVec<edm4hep::MCParticleData> in);
 
@@ -164,19 +164,19 @@ namespace MCParticle{
 
   /// return the phi of the input MCParticles
   ROOT::VecOps::RVec<float> get_phi(ROOT::VecOps::RVec<edm4hep::MCParticleData> in);
-  
+
   /// return the energy of the input MCParticles
   ROOT::VecOps::RVec<float> get_e(ROOT::VecOps::RVec<edm4hep::MCParticleData> in);
 
   /// return the masses of the input MCParticles
-  ROOT::VecOps::RVec<float> get_mass(ROOT::VecOps::RVec<edm4hep::MCParticleData> in); 
-  
+  ROOT::VecOps::RVec<float> get_mass(ROOT::VecOps::RVec<edm4hep::MCParticleData> in);
+
   /// return the charges of the input MCParticles
-  ROOT::VecOps::RVec<float> get_charge(ROOT::VecOps::RVec<edm4hep::MCParticleData> in); 
-  
+  ROOT::VecOps::RVec<float> get_charge(ROOT::VecOps::RVec<edm4hep::MCParticleData> in);
+
   /// return the TlorentzVector of the input MCParticles
   ROOT::VecOps::RVec<TLorentzVector> get_tlv(ROOT::VecOps::RVec<edm4hep::MCParticleData> in);
-  
+
   /// concatenate both input vectors and return the resulting vector
   ROOT::VecOps::RVec<edm4hep::MCParticleData> mergeParticles(ROOT::VecOps::RVec<edm4hep::MCParticleData> x, ROOT::VecOps::RVec<edm4hep::MCParticleData> y);
 
@@ -194,8 +194,8 @@ namespace MCParticle{
   std::vector<int> get_list_of_stable_particles_from_decay( int i, ROOT::VecOps::RVec<edm4hep::MCParticleData> in, ROOT::VecOps::RVec<int> ind) ;
 
   /// return the list of particles from the decay of a mother particle. i is the mother index in the Particle block.
-  std::vector<int> get_list_of_particles_from_decay( int i, 
-						 ROOT::VecOps::RVec<edm4hep::MCParticleData> in, 
+  std::vector<int> get_list_of_particles_from_decay( int i,
+						 ROOT::VecOps::RVec<edm4hep::MCParticleData> in,
 						 ROOT::VecOps::RVec<int> ind) ;
 
   /// returns one MCParticle selected by its index in the particle block
@@ -211,5 +211,7 @@ namespace MCParticle{
 
 
 
-}
+}//#end NS MCParticle
+
+}//end NS FCCAnalyses
 #endif
