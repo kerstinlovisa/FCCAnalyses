@@ -7,8 +7,9 @@ import os
 class runDataFrameFinal():
 
     #__________________________________________________________
-    def __init__(self, baseDir, procDict, processes, cuts, variables, intLumi=1., treename="events", defines={},cut_labels={}):
+    def __init__(self, baseDir, outDir, procDict, processes, cuts, variables, intLumi=1., treename="events", defines={},cut_labels={}):
         self.baseDir   = baseDir
+        self.outDir    = outDir
         self.processes = processes
         self.variables = variables
         self.cuts      = cuts
@@ -97,7 +98,7 @@ class runDataFrameFinal():
             if os.path.isdir(self.baseDir+pr):
                 print ('is dir found')
                 import glob
-                flist=glob.glob(self.baseDir+pr+"/flat_chunk_*.root")
+                flist=glob.glob(self.baseDir+pr+"/chunk*.root")
                 for f in flist:
                     tfin = ROOT.TFile.Open(f)
                     print (f,'    ===    ',tfin, '  ',type(tfin))
@@ -227,7 +228,7 @@ class runDataFrameFinal():
             # And save everything
             print ('     Saving outputs')
             for i, cut in enumerate(self.cuts):
-                fhisto = self.baseDir+pr+'_'+cut+'_histo.root' #output file for histograms
+                fhisto = self.outDir+pr+'_'+cut+'_histo.root' #output file for histograms
                 tf    = ROOT.TFile.Open(fhisto,'RECREATE')
                 for h in histos_list[i]:
                     if doScale:
@@ -259,7 +260,6 @@ class runDataFrameFinal():
                 if (i == 0):
                     print('        \\hline',file=f)
             print('        \\hline \n    \\end{tabular}} \n    \\caption{Caption} \n    \\label{tab:my_label} \n\\end{table}', file=f)
-            
             # Efficiency:
             print('\n\nEfficiency: ', file=f)
             print('\\begin{table}[H] \n    \\centering \n    \\resizebox{\\textwidth}{!}{ \n    \\begin{tabular}{|l||',end='',file=f)
